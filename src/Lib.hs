@@ -2,6 +2,9 @@ module Lib where
 
 import Control.Exception
 import Data.Char
+import Data.List
+import GHC.Stack
+import System.IO.Unsafe
 
 someFunc :: Int -> IO ()
 someFunc n = do
@@ -19,6 +22,13 @@ someOtherFunc c = do
 somePureFunc :: Int -> ()
 somePureFunc n =
   if n == 0 then error "gotem pure" else ()
+
+aThingWithAStack :: Int -> String
+aThingWithAStack n =
+  if n >= -0 then
+    intercalate "\n" (unsafePerformIO currentCallStack)
+  else
+    error "never will happen"
 
 yetAnotherFunc :: Int -> IO ()
 yetAnotherFunc n = evaluate $

@@ -19,6 +19,10 @@ main = hspec $ do
     it "should bomb with myCoolerAssertion" $ do
       myCoolerAssertion someFunc
 
+    it "should get the call stack" $ do
+      RenderedString "^^ look ma, a call stack"
+        `shouldBe` RenderedString (aThingWithAStack 0)
+
   where
   myCoolAssertion x n = do
     a <- try (x n) :: IO (Either ErrorCall ())
@@ -26,3 +30,9 @@ main = hspec $ do
 
   myCoolerAssertion x = do
     myCoolAssertion x 1
+
+newtype RenderedString = RenderedString String
+  deriving (Eq)
+
+instance Show RenderedString where
+  show (RenderedString s) = s
