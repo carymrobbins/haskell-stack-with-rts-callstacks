@@ -9,25 +9,20 @@ test-profiling:
 test-no-profiling:
 	stack test $(BASE_OPTS)
 
-run-profiling: build-profiling unsafe-run
-
-run-no-profiling: build-no-profiling unsafe-run
-
-# Because of weirdness with stack exec, better to just clean beforehand.
-
-build-profiling: clean
+build-profiling:
 	stack build $(PROFILE_OPTS)
 
-build-no-profiling: clean
-	stack build $(BASE_OPTS) $(PROFILE_OPTS)
+build-no-profiling:
+	stack build $(BASE_OPTS)
 
-# I don't know why this doesn't work
-# stack exec haskell-stack-with-rts-callstacks-exe
+# Note that we need to use 'stack build --exec' instead of 'stack run' as the latter
+# doesn't seem to find the exe built with profiling properly.
 
-unsafe-run:
-	find \
-          $(PWD)/.stack-work/install/*/*/8.6.5/bin/haskell-stack-with-rts-callstacks-exe \
-	  -exec {} \;
+run-profiling:
+	stack build $(PROFILE_OPTS) --exec haskell-stack-with-rts-callstacks-exe
+
+run-no-profiling:
+	stack build $(BASE_OPTS) --exec haskell-stack-with-rts-callstacks-exe
 
 clean:
 	stack clean
