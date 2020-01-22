@@ -1,0 +1,39 @@
+name:                haskell-stack-with-rts-callstacks
+version:             0.0.0.0
+github:              "carymrobbins/haskell-stack-with-rts-callstacks"
+license:             BSD3
+author:              "Cary Robbins"
+maintainer:          "carymrobbins@gmail.com"
+copyright:           "2020 Cary Robbins"
+
+description:         Please see the README on GitHub at <https://github.com/carymrobbins/haskell-stack-with-rts-callstacks#readme>
+
+dependencies:
+- base >= 4.7 && < 5
+- aeson # add a dummy dependency to test switching between profiling or no-profiling builds
+
+library:
+  source-dirs: src
+
+executables:
+  haskell-stack-with-rts-callstacks-exe:
+    main:                Main.hs
+    source-dirs:         app
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-stack-with-rts-callstacks
+
+tests:
+  haskell-stack-with-rts-callstacks-test:
+    main:                Spec.hs
+    source-dirs:         test
+    ghc-options:
+    - -threaded
+    - -rtsopts
+    - -with-rtsopts=-N
+    dependencies:
+    - haskell-stack-with-rts-callstacks
+    - hspec
